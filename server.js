@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.config');
+const uuidv1 = require('uuid/v1');
+
 
 new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
@@ -50,9 +52,14 @@ wss.on('connection', (ws) => {
 
   ws.on('message', function incoming(data) {
     console.log('received:', JSON.parse(data));
-
+    let messageObj = JSON.parse(data);
+    console.log(messageObj);
+    messageObj.id = uuidv1();
+    console.log(messageObj);
+    messageObjJSON = JSON.stringify(messageObj);
+    console.log(messageObjJSON);
     wss.clients.forEach(function each(client) {
-        client.send(data);
+      client.send(messageObjJSON);
     })
   });
 

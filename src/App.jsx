@@ -3,6 +3,7 @@ import Navbar from './Navbar.jsx';
 import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 import Chatbar from './Chatbar.jsx';
+const uuidv1 = require('uuid/v1');
 
 class App extends Component {
 
@@ -11,17 +12,10 @@ class App extends Component {
     // this is the *only* time you should assign directly to state:
     this.state = {
                   currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-                  messages: [
-                    {
-                      username: "Bob",
-                      content: "Has anyone seen my marbles?",
-                    },
-                    {
-                      username: "Anonymous",
-                      content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-                    }
-                  ]
+                  messages: []
                   }
+
+   this.handleUserChange = this.handleUserChange.bind(this);
    }
 
 componentDidMount() {
@@ -38,13 +32,13 @@ componentDidMount() {
   // ws.onopen = function (event) {
   // ws.send("Here's some text that the server is urgently awaiting!");
   // };
-  console.log(this)
 
   ws.onmessage = (event) => {
   console.log(this)
 
     // Parse the message data into a JavaScript object using JSON.parse()
     const newMessage = JSON.parse(event.data);
+    console.log(newMessage)
 
     // concat the message to the list of messages in our state
     let messages = this.state.messages;
@@ -74,14 +68,17 @@ handleMessage = (fromChatBar) => {
     username: this.state.currentUser.name,
     content: fromChatBar
   }
-
   this.socket.send(JSON.stringify(newMessage));
 
+// this is from when we had seed data above:
   // let messages = this.state.messages
   // this.setState({messages: messages.concat(newMessage)})
   // console.log(messages)
 }
 
+handleUserChange(fromChatBar) {
+  this.setState( { currentUser: {name: fromChatBar } } )
+}
 
   render() {
     console.log("Rendering <App/>");
@@ -91,7 +88,8 @@ handleMessage = (fromChatBar) => {
       <main className="messages">
       <MessageList messages={this.state.messages} />
       <Message />
-      <Chatbar currentUser={this.state.currentUser.name} handleMessage={this.handleMessage} />
+      <Chatbar currentUser={this.state.currentUser.name} handleMessage={this.handleMessage}
+      handleUserChange={this.handleUserChange} />
       </main>
       </div>
     );
