@@ -42,13 +42,16 @@ const wss = new SocketServer({ server });
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  // console.log("here is the object you are looking for", ws)
+  // console.log("********************************", wss.clients)
+  const userSet = wss.clients
+  // console.log(userSet.size)
+  let usersOnline = { type: "usersOnline", content: userSet.size };
+  usersOnline = JSON.stringify(usersOnline);
+  wss.clients.forEach((client) => {
+  client.send(usersOnline);
+  });
 
-//   ws.on('message', function incoming(data) {
-//     console.log('received:', data);
-//   });
-
-//   ws.send('something');
-// });
 
   ws.on('message', function incoming(data) {
     console.log('received:', JSON.parse(data));
@@ -85,11 +88,15 @@ wss.on('connection', (ws) => {
         messageObj.type = 'incomingNotification';
         message = JSON.stringify(messageObj);
         break;
+      // case "usersOnline":
+      //   messageObj.type = 'usersOnline';
+      //   message = JSON.stringify(messageObj);
+      //   break;
       default:
         // show an error in the console if the message type is unknown
         throw new Error("Unknown event type " + data.type);
     }
-    wss.clients.forEach(function each(client) {
+    wss.clients.forEach((client) => {
       client.send(message);
     })
 

@@ -12,6 +12,7 @@ class App extends Component {
     super(props);
     // this is the *only* time you should assign directly to state:
     this.state = {
+                  usersOnline: "",
                   currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
                   messages: []
                   }
@@ -41,16 +42,22 @@ componentDidMount() {
   const newMessage = JSON.parse(event.data);
   console.log(newMessage)
   console.log(newMessage.type)
+  console.log(this)
 
   let messages = this.state.messages;
+  let usersOnline = this.state.usersOnline;
+
 
     switch(newMessage.type) {
       case "incomingMessage":
         this.setState({ messages: messages.concat(newMessage) });
-        break; //why need this???
+        break;
       case "incomingNotification":
         this.setState({ messages: messages.concat(newMessage) });
-        break; //why need this???
+        break;
+      case "usersOnline":
+        this.setState({ usersOnline: newMessage.content});
+        break;
       default:
         console.log("this is an error - no type ");
     }
@@ -107,7 +114,7 @@ handleUserChange(fromChatBar) {
     console.log("Rendering <App/>");
     return (
       <div>
-      <Navbar />
+      <Navbar usersOnline={this.state.usersOnline} />
       <main className="messages">
       <MessageList messages={this.state.messages} />
       <Chatbar currentUser={this.state.currentUser.name} handleMessage={this.handleMessage}
