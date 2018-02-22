@@ -53,14 +53,47 @@ wss.on('connection', (ws) => {
   ws.on('message', function incoming(data) {
     console.log('received:', JSON.parse(data));
     let messageObj = JSON.parse(data);
-    console.log(messageObj);
     messageObj.id = uuidv1();
-    console.log(messageObj);
-    messageObjJSON = JSON.stringify(messageObj);
-    console.log(messageObjJSON);
+
+    // const commandData = message.content.match(/^\/giphy\s+(\w.*)$/)
+    // // if (commandData) {
+    //   const qs = querystring.stringify({
+    //     api_key:
+    //     tag: commandData[1]
+    //   })
+    // }
+    // const url = 'https://api.giphy.com/v1/gifs/random?{qs}'
+
+    // fetch(url)
+    //   .then( resp => {
+    //     if (resp.ok)   {
+    //       return resp.json()
+    //     }
+    //     throw new Error('invalid format')
+    //   })
+    //   .then
+
+    // message.content = commandData[1]
+    let message = ""
+
+    switch(messageObj.type) {
+      case "postMessage":
+        messageObj.type = "incomingMessage";
+        message = JSON.stringify(messageObj);
+        break;
+      case "postNotification":
+        messageObj.type = 'incomingNotification';
+        message = JSON.stringify(messageObj);
+        break;
+      default:
+        // show an error in the console if the message type is unknown
+        throw new Error("Unknown event type " + data.type);
+    }
     wss.clients.forEach(function each(client) {
-      client.send(messageObjJSON);
+      client.send(message);
     })
+
+
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.

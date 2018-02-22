@@ -8,8 +8,9 @@ class Message extends Component {
       <div className="message">
       <span className="message-username">{this.props.username}</span>
       <span className="message-content">{this.props.content}</span>
+      {/*<span className="message-id">{this.props.messageid}</span>*/}
       </div>
-    );
+      );
   }
 }
 export default Message;

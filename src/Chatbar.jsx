@@ -3,7 +3,10 @@ import React, {Component} from 'react';
 class Chatbar extends Component {
 
   handleUsername = (event) => {
+  if(event.key === 'Enter' || event.key === 'Tab' ) {
     this.props.handleUserChange(event.target.value);
+    console.log(event.target.value)
+    }
   }
 
   handleMessageKeyPress = (event) => {
@@ -21,7 +24,7 @@ class Chatbar extends Component {
 
       <input name="username" className="chatbar-username"
       placeholder="Type a username and hit ENTER"
-      onBlur={this.handleUsername} />
+      onKeyPress={this.handleUsername} />
 
       <input name="message" className="chatbar-message"
       placeholder="Type a message and hit ENTER"

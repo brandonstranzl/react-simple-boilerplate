@@ -3,6 +3,7 @@ import Navbar from './Navbar.jsx';
 import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 import Chatbar from './Chatbar.jsx';
+import Notification from './Notification.jsx';
 const uuidv1 = require('uuid/v1');
 
 class App extends Component {
@@ -37,25 +38,38 @@ componentDidMount() {
   console.log(this)
 
     // Parse the message data into a JavaScript object using JSON.parse()
-    const newMessage = JSON.parse(event.data);
-    console.log(newMessage)
+  const newMessage = JSON.parse(event.data);
+  console.log(newMessage)
+  console.log(newMessage.type)
+
+  let messages = this.state.messages;
+
+    switch(newMessage.type) {
+      case "incomingMessage":
+        this.setState({ messages: messages.concat(newMessage) });
+        break; //why need this???
+      case "incomingNotification":
+        this.setState({ messages: messages.concat(newMessage) });
+        break; //why need this???
+      default:
+        console.log("this is an error - no type ");
+    }
 
     // concat the message to the list of messages in our state
-    let messages = this.state.messages;
-    this.setState({ messages: messages.concat(newMessage) });
+
   }
 
-  setTimeout(() => {
-    console.log("Simulating incoming message");
+  // setTimeout(() => {
+  //   console.log("Simulating incoming message");
 
-    // Add a new message to the list of messages in the data store
-    const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-    const messages = this.state.messages.concat(newMessage)
+  //   // Add a new message to the list of messages in the data store
+  //   const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+  //   const messages = this.state.messages.concat(newMessage)
 
-    // Update the state of the app component.
-    // Calling setState will trigger a call to render() in App and all child components.
-    this.setState({messages: messages})
-  }, 3000);
+  //   // Update the state of the app component.
+  //   // Calling setState will trigger a call to render() in App and all child components.
+  //   this.setState({messages: messages})
+  // }, 3000);
 }
 
 componentWillUnmount() {
@@ -66,7 +80,8 @@ handleMessage = (fromChatBar) => {
 
   const newMessage = {
     username: this.state.currentUser.name,
-    content: fromChatBar
+    content: fromChatBar,
+    type: "postMessage"
   }
   this.socket.send(JSON.stringify(newMessage));
 
@@ -77,8 +92,16 @@ handleMessage = (fromChatBar) => {
 }
 
 handleUserChange(fromChatBar) {
+  const username = this.state.currentUser.name;
+
+  const newMessage = {
+    content: "User " + username + " has changed their name to " + fromChatBar,
+    type: "postNotification"
+  }
+  this.socket.send(JSON.stringify(newMessage));
   this.setState( { currentUser: {name: fromChatBar } } )
 }
+
 
   render() {
     console.log("Rendering <App/>");
@@ -87,7 +110,6 @@ handleUserChange(fromChatBar) {
       <Navbar />
       <main className="messages">
       <MessageList messages={this.state.messages} />
-      <Message />
       <Chatbar currentUser={this.state.currentUser.name} handleMessage={this.handleMessage}
       handleUserChange={this.handleUserChange} />
       </main>
