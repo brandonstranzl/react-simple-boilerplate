@@ -74,6 +74,7 @@ handleMessage = (fromChatBar) => {
 
 handleUserChange(fromChatBar) {
   const username = this.state.currentUser.name;
+  console.log(this)
 
   const newMessage = {
     content: "User " + username + " has changed their name to " + fromChatBar,
