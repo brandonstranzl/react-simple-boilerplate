@@ -3,14 +3,14 @@ import React, {Component} from 'react';
 class Chatbar extends Component {
 
   handleUsername = (event) => {
-  if(event.key === 'Enter' || event.key === 'Tab' ) {
+  if(event.key === 'Enter') {
     this.props.handleUserChange(event.target.value);
     console.log(event.target.value)
     }
   }
 
   handleMessageKeyPress = (event) => {
-  if(event.key === 'Enter' || event.key === 'Tab' ) {
+  if(event.key === 'Enter') {
       this.props.handleMessage(event.target.value)
       event.target.value = " ";
     }

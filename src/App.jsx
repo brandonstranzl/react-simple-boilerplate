@@ -5,15 +5,15 @@ import MessageList from './MessageList.jsx';
 import Chatbar from './Chatbar.jsx';
 import Notification from './Notification.jsx';
 const uuidv1 = require('uuid/v1');
+var randomColor = require('randomcolor');
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    // this is the *only* time you should assign directly to state:
     this.state = {
                   usersOnline: "",
-                  currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+                  currentUser: {name: "Bob", fontcolor: ""}, // optional. if currentUser is not defined, it means the user is Anonymous
                   messages: []
                   }
 
@@ -26,29 +26,22 @@ componentDidMount() {
   const ws = new WebSocket("ws:/localhost:3001");
   this.socket = ws;
 
-  ws.onopen = function(ev) {
-  console.log("Connected to server at 3001!");
-  // ws.send("Here's some text that the server is urgently awaiting!");
+  ws.onopen = (ev) => {
+    console.log("Connected to server at 3001!");
   }
 
-  // ws.onopen = function (event) {
-  // ws.send("Here's some text that the server is urgently awaiting!");
-  // };
-
   ws.onmessage = (event) => {
-  console.log(this)
 
-    // Parse the message data into a JavaScript object using JSON.parse()
   const newMessage = JSON.parse(event.data);
-  console.log(newMessage)
-  console.log(newMessage.type)
-  console.log(this)
 
   let messages = this.state.messages;
   let usersOnline = this.state.usersOnline;
+  let currentUser = this.state.currentUser;
 
 
     switch(newMessage.type) {
+      case "setColor":
+        this.setState({ currentUser: { name: this.state.currentUser.name, fontcolor: newMessage.fontcolor } });
       case "incomingMessage":
         this.setState({ messages: messages.concat(newMessage) });
         break;
@@ -61,22 +54,7 @@ componentDidMount() {
       default:
         console.log("this is an error - no type ");
     }
-
-    // concat the message to the list of messages in our state
-
   }
-
-  // setTimeout(() => {
-  //   console.log("Simulating incoming message");
-
-  //   // Add a new message to the list of messages in the data store
-  //   const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-  //   const messages = this.state.messages.concat(newMessage)
-
-  //   // Update the state of the app component.
-  //   // Calling setState will trigger a call to render() in App and all child components.
-  //   this.setState({messages: messages})
-  // }, 3000);
 }
 
 componentWillUnmount() {
@@ -87,15 +65,11 @@ handleMessage = (fromChatBar) => {
 
   const newMessage = {
     username: this.state.currentUser.name,
+    fontcolor: this.state.currentUser.fontcolor,
     content: fromChatBar,
     type: "postMessage"
   }
   this.socket.send(JSON.stringify(newMessage));
-
-// this is from when we had seed data above:
-  // let messages = this.state.messages
-  // this.setState({messages: messages.concat(newMessage)})
-  // console.log(messages)
 }
 
 handleUserChange(fromChatBar) {
@@ -103,10 +77,12 @@ handleUserChange(fromChatBar) {
 
   const newMessage = {
     content: "User " + username + " has changed their name to " + fromChatBar,
-    type: "postNotification"
+    type: "postNotification",
+    name: fromChatBar
   }
   this.socket.send(JSON.stringify(newMessage));
-  this.setState( { currentUser: {name: fromChatBar } } )
+  this.setState( { currentUser: {name: fromChatBar, fontcolor: this.state.currentUser.fontcolor } } )
+  console.log("here is new state after user change", this.state.currentUser)
 }
 
 

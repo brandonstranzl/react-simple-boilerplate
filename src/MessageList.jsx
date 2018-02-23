@@ -5,19 +5,8 @@ import Notification from './Notification.jsx';
 class MessageList extends Component {
   render() {
 
-  console.log("Rendering <Message List/>");
-
-  const renderedMessages = this.props.messages.map((message, id) => {
-      // switch (message.type) {
-      //   case 'incomingNotification':
-      //   return <Notification />
-      //   default:
-      //   return <Message
-      //   username={message.username}
-      //   content={message.content}
-      //   messageid={message.id}
-      //   key={message.id}/>
-      // }
+  const renderedMessages = this.props.messages.map((message, index) => {
+        console.log(message)
       return (
         message.type === 'incomingNotification' ?
         <Notification
@@ -28,7 +17,8 @@ class MessageList extends Component {
         username={message.username}
         content={message.content}
         messageid={message.id}
-        key={message.id}
+        key={index}
+        fontcolor={message.fontcolor}
       />
 
       )
