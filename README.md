@@ -23,7 +23,7 @@ This app is a basic chat application:
 ### Screenshots:
 
 Here is the screenshot of a userscreeen at time of connection:
-(https://github.com/brandonstranzl/react-simple-boilerplate/blob/master/docs/Connection%20Screenshot.png?raw=true)
+(react-simple-boilerplate/docs/Connection Screenshot.png)
 
 Here is a screenshot showing four users connected. Note the usercount in upper right-hand
 corner, as well as the notifications that each user has chosen a username, as well as the
