@@ -23,18 +23,18 @@ This app is a basic chat application:
 ### Screenshots:
 
 Here is the screenshot of a userscreeen at time of connection:
-!["Initial connection screen"] https://github.com/brandonstranzl/react-simple-boilerplate/blob/master/docs/Connection%20Screenshot.png?raw=true
+https://github.com/brandonstranzl/react-simple-boilerplate/blob/master/docs/Connection%20Screenshot.png?raw=true
 
 
 Here is a screenshot showing four users connected. Note the usercount in upper right-hand
 corner, as well as the notifications that each user has chosen a username, as well as the
 different fontcolors assigned to each username.
-!["Four users connected screen"]https://github.com/brandonstranzl/react-simple-boilerplate/blob/master/docs/Four%20Users%20All%20Names%20Changed%20with%20Notifications%20and%20Messages.png?raw=true
+https://github.com/brandonstranzl/react-simple-boilerplate/blob/master/docs/Four%20Users%20All%20Names%20Changed%20with%20Notifications%20and%20Messages.png?raw=true
 
 
 Here is a screenshot showing the user count online decremented back to "1" after three
 users disconnect.
-!["Three users disconnected screen"]https://github.com/brandonstranzl/react-simple-boilerplate/blob/master/docs/Three%20Users%20Disconnected%20Showing%20Updated%20Users%20Online.png?raw=true
+https://github.com/brandonstranzl/react-simple-boilerplate/blob/master/docs/Three%20Users%20Disconnected%20Showing%20Updated%20Users%20Online.png?raw=true
 
 ### Dependencies
 
